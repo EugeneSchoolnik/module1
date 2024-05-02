@@ -1,0 +1,61 @@
+.restorepass {
+  justify-content: center;
+  align-items: center;
+  form {
+    background: $darkGray;
+    padding: 1.5rem;
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      position: relative;
+      margin-bottom: 1rem;
+      input {
+        @include input;
+      }
+      .eye {
+        position: absolute;
+        top: 2.1rem;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        padding: 0.2rem;
+        cursor: pointer;
+      }
+      .error {
+        display: block;
+        height: 0.8rem;
+        text-align: right;
+        color: $red;
+      }
+    }
+    .serverError {
+      display: block;
+      width: max-content;
+      max-width: 100%;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      margin: 1.5rem auto;
+      margin-bottom: 0;
+      background: $red;
+      color: #fff;
+    }
+    button {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.7rem;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: $green;
+      color: #000;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      &:hover {
+        background-color: $greenLight;
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+.emailcode {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: $light;
+  .popup {
+    width: 320px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: $darkGray;
+    padding: 1.5rem;
+    padding-top: 2rem;
+    i {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    h3 {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    input {
+      @include input;
+    }
+    span {
+      color: $red;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  }
+}
