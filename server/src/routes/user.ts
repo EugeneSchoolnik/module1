@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth, checkEmail, getMe, login, register } from "../controllers/user";
+import { auth, getMe, login, register, getCountries, restorePass, logout } from "../controllers/user";
 
 const user = Router();
 
@@ -9,6 +9,10 @@ user.post("/login", login);
 
 user.get("/me", auth, getMe);
 
-user.post("/emailcode", checkEmail);
+user.get("/countries", getCountries);
+
+user.post("/restorepass", restorePass);
+
+user.post("/logout", auth, logout);
 
 export default user;

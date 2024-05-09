@@ -5,9 +5,9 @@ import { clientError, errorHandler } from "../../utils/error";
 import { Handler } from "../../utils/express";
 import { IUser } from "./types";
 import { Response } from "express";
-import transporter from "../../nodemail";
+import countries from "./countries.json";
 
-const setToken = (res: Response, token: string, maxAge: number) => {
+export const setToken = (res: Response, token: string, maxAge: number) => {
   res.cookie("authorization", token, { httpOnly: true, maxAge });
 };
 
@@ -17,7 +17,7 @@ export const register: Handler = async (req, res) => {
       password: string;
     };
 
-    const exist = (await db.execute("SELECT id FROM users WHERE email = ? AND phone = ?", [email, phone]))[0][0];
+    const exist = (await db.execute("SELECT id FROM users WHERE email = ? OR phone = ?", [email, phone]))[0][0];
     if (exist) throw clientError(409, "User with this data already exists");
 
     const id = uniqid.time();
@@ -29,7 +29,7 @@ export const register: Handler = async (req, res) => {
     );
     if (result && result.affectedRows !== 1) throw clientError(500, "Registration error");
 
-    const user: IUser = { id, fullName, gender, age, phone, email, country, employed };
+    const user: IUser = { id, fullName, gender, age, phone, email, country, employed, avatar: null };
     const token = jwt.sign(user, Bun.env.JWT_SECRET, { expiresIn: "5d" });
 
     setToken(res, token, 5 * 24 * 60 * 60 * 1000);
@@ -85,33 +85,32 @@ export const auth: Handler = async (req, res, next) => {
   }
 };
 
-export const checkEmail: Handler = async (req, res) => {
+export const logout: Handler = async (req, res, next) => {
+  setToken(res, "", 0);
+  res.send();
+};
+
+export const getCountries: Handler = async (req, res) => {
   try {
-    const { email } = req.body;
+    res.status(200).json({ data: countries });
+  } catch (e) {
+    errorHandler(e, res);
+  }
+};
 
-    const code = Array.from({ length: 6 })
-      .map(() => Math.floor(Math.random() * 10))
-      .join("");
+export const restorePass: Handler = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-    await new Promise((resolve, reject) => {
-      transporter.sendMail(
-        {
-          from: {
-            name: "Module 1",
-            address: Bun.env.NODE_MAIL_USER,
-          },
-          to: email,
-          subject: "Registration",
-          html: `<p>Your code: <b>${code}</b></p>`,
-        },
-        (err) => {
-          if (err) return reject(err);
-          resolve(1);
-        }
-      );
-    });
+    const user = (await db.execute("SELECT * FROM users WHERE email = ?", [email]))[0][0];
+    if (!user) throw clientError(404, "User not found");
 
-    res.status(200).json({ data: code });
+    const hash = await Bun.password.hash(password, "bcrypt");
+
+    const result: any = await db.execute("UPDATE users SET password = ? WHERE email = ?", [hash, email]);
+    if (result[0] && result[0].affectedRows == 0) throw clientError(500, "Error update password");
+
+    res.status(200).send();
   } catch (e) {
     errorHandler(e, res);
   }

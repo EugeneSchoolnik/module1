@@ -7,4 +7,5 @@ export interface IUser {
   email: string;
   country: string;
   employed: boolean;
+  avatar: string;
 }
