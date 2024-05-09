@@ -50,7 +50,7 @@
           `/user/${isAuth ? "login" : "register"}`,
           Object.fromEntries(Object.entries(user).map(([key, value]) => [key, value.value]))
         );
-        USER.set(res.data.data);
+        USER.set(res.data.data.user);
         goTo("/profile");
       } catch (e: any) {
         try {
@@ -138,6 +138,6 @@
     </div>
   </form>
   {#if $emailStatus == "pending"}
-    <EmailCode email={user.email.value} subject="Restore password" />
+    <EmailCode email={user.email.value} subject="Registration" />
   {/if}
 </div>

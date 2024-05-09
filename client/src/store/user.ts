@@ -9,6 +9,7 @@ export interface IUser {
   email: string;
   country: string;
   employed: boolean;
+  avatar: string;
 }
 
 const USER = writable<IUser | null>(null);

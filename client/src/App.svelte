@@ -1,10 +1,24 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import s from "./app.module.scss";
   import Auth from "./pages/Auth/Auth.svelte";
   import Profile from "./pages/Profile/Profile.svelte";
   import RestorePass from "./pages/RestorePass/RestorePass.svelte";
   import Route from "./utils/Router/Route.svelte";
   import Router from "./utils/Router/Router.svelte";
+  import server from "./utils/axiosInstance";
+  import USER from "./store/user";
+  import { goTo } from "./utils/Router/router";
+
+  onMount(() => {
+    server
+      .get("/user/me")
+      .then((res) => {
+        USER.set(res.data.data.user);
+        goTo("/profile");
+      })
+      .catch(() => goTo("/login"));
+  });
 </script>
 
 <main class={s.app}>

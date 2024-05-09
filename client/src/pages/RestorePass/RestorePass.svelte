@@ -58,6 +58,6 @@
     <button>Confirm</button>
   </form>
   {#if $emailStatus == "pending"}
-    <EmailCode email={form.email.value} subject="Registration" />
+    <EmailCode email={form.email.value} subject="Restore password" />
   {/if}
 </div>

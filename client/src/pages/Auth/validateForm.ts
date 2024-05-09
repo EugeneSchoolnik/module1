@@ -9,7 +9,7 @@ type user = {
   password: { value: string; error: string };
 };
 
-export const validateForm = (data: user, isAuth: boolean): boolean => {
+export const validateForm = (data: user, isAuth: boolean, ignorePassword = false): boolean => {
   let valid = true;
   for (const k of Object.keys(data) as (keyof user)[]) {
     if (isAuth && k !== "email" && k !== "password") continue;
@@ -37,6 +37,7 @@ export const validateForm = (data: user, isAuth: boolean): boolean => {
         if (!field.value) error = "The field can't be empty";
         break;
       case "password":
+        if (ignorePassword) break;
         if ((field.value as string).length < 8) {
           error = "Minimum length 8 characters";
           break;
