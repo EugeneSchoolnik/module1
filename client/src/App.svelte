@@ -9,15 +9,13 @@
   import server from "./utils/axiosInstance";
   import USER from "./store/user";
   import { goTo } from "./utils/Router/router";
+  import ReadFile from "./pages/ReadFile/ReadFile.svelte";
 
   onMount(() => {
-    server
-      .get("/user/me")
-      .then((res) => {
-        USER.set(res.data.data.user);
-        goTo("/profile");
-      })
-      .catch(() => goTo("/login"));
+    server.get("/user/me").then((res) => {
+      USER.set(res.data.data.user);
+      goTo("/profile");
+    });
   });
 </script>
 
@@ -27,4 +25,5 @@
   <Route path="/login" element={Auth} />
   <Route path="/restorepass" element={RestorePass} />
   <Route path="/profile" element={Profile} />
+  <Route path="/file" element={ReadFile} />
 </main>
