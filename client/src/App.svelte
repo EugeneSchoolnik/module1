@@ -10,6 +10,7 @@
   import USER from "./store/user";
   import { goTo } from "./utils/Router/router";
   import ReadFile from "./pages/ReadFile/ReadFile.svelte";
+  import Data from "./pages/Data/Data.svelte";
 
   onMount(() => {
     server.get("/user/me").then((res) => {
@@ -26,4 +27,5 @@
   <Route path="/restorepass" element={RestorePass} />
   <Route path="/profile" element={Profile} />
   <Route path="/file" element={ReadFile} />
+  <Route path="/data" element={Data} />
 </main>
