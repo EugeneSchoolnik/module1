@@ -8,14 +8,13 @@
   import Router from "./utils/Router/Router.svelte";
   import server from "./utils/axiosInstance";
   import USER from "./store/user";
-  import { goTo } from "./utils/Router/router";
   import ReadFile from "./pages/ReadFile/ReadFile.svelte";
   import Data from "./pages/Data/Data.svelte";
+  import MapElement from "./pages/Map/Map.svelte";
 
   onMount(() => {
     server.get("/user/me").then((res) => {
       USER.set(res.data.data.user);
-      goTo("/profile");
     });
   });
 </script>
@@ -28,4 +27,5 @@
   <Route path="/profile" element={Profile} />
   <Route path="/file" element={ReadFile} />
   <Route path="/data" element={Data} />
+  <Route path="/map" element={MapElement} />
 </main>
